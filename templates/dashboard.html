@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>PaperGuard Dashboard</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>PaperGuard Dashboard</h1>
+
+    <p>
+        Welcome,
+        <strong>{{ session["username"] }}</strong>
+    </p>
+
+    <p>
+        Role:
+        <strong>{{ session["role"] }}</strong>
+    </p>
+
+    <a class="button"
+       href="{{ url_for('main.logout') }}">
+        Logout
+    </a>
+
+
+    {% if session["role"] == "admin" %}
+
+        <a class="button"
+           href="{{ url_for('main.upload') }}">
+            Upload Exam Paper
+        </a>
+
+        <a class="button"
+           href="{{ url_for('main.add_faculty') }}">
+            Add Faculty
+        </a>
+
+        <!-- ================= SECURITY DASHBOARD ================= -->
+
+        <h2>Security Dashboard</h2>
+
+        <div class="stats">
+
+            <div class="stat-box">
+                <h3>Total Papers</h3>
+                <p>{{ stats["total_papers"] }}</p>
+            </div>
+
+            <div class="stat-box">
+                <h3>Total Faculty</h3>
+                <p>{{ stats["total_faculty"] }}</p>
+            </div>
+
+            <div class="stat-box">
+                <h3>Authorized Access</h3>
+                <p>{{ stats["authorized_access"] }}</p>
+            </div>
+
+            <div class="stat-box">
+                <h3>Unauthorized Attempts</h3>
+                <p>{{ stats["unauthorized_attempts"] }}</p>
+            </div>
+
+            <div class="stat-box">
+                <h3>Suspicious Users</h3>
+                <p>{{ stats["suspicious_users"] }}</p>
+            </div>
+
+        </div>
+
+
+        <!-- ================= SUSPICIOUS USERS ================= -->
+
+        <h2>Suspicious Activity</h2>
+
+        {% if suspicious_users %}
+
+        <table>
+
+            <tr>
+                <th>Username</th>
+                <th>Unauthorized Attempts</th>
+                <th>Status</th>
+            </tr>
+
+            {% for user in suspicious_users %}
+
+            <tr>
+
+                <td>
+                    {{ user["username"] }}
+                </td>
+
+                <td>
+                    {{ user["attempts"] }}
+                </td>
+
+                <td>
+                    SUSPICIOUS
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </table>
+
+        {% else %}
+
+            <p>
+                No suspicious activity detected.
+            </p>
+
+        {% endif %}
+
+    {% endif %}
+
+
+    <!-- ================= EXAM PAPERS ================= -->
+
+    <h2>Exam Papers</h2>
+
+    {% if papers %}
+
+    <table>
+
+        <tr>
+
+            <th>ID</th>
+            <th>Title</th>
+
+            {% if session["role"] == "admin" %}
+                <th>Assigned Faculty</th>
+            {% endif %}
+
+            <th>Action</th>
+
+        </tr>
+
+
+        {% for paper in papers %}
+
+        <tr>
+
+            <td>
+                {{ paper["id"] }}
+            </td>
+
+            <td>
+                {{ paper["title"] }}
+            </td>
+
+
+            {% if session["role"] == "admin" %}
+
+            <td>
+                {{ paper["faculty_username"] or "Not Assigned" }}
+            </td>
+
+            {% endif %}
+
+
+            <td>
+
+                <a href="{{ url_for(
+                    'main.access_paper',
+                    paper_id=paper['id']
+                ) }}"
+                target="_blank">
+
+                    Access Paper
+
+                </a>
+
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+    {% else %}
+
+        <p>
+            No exam papers available.
+        </p>
+
+    {% endif %}
+
+
+    <!-- ================= SECURITY LOGS ================= -->
+
+    {% if session["role"] == "admin" %}
+
+    <h2>Security Logs</h2>
+
+    {% if logs %}
+
+    <table>
+
+        <tr>
+
+            <th>User</th>
+            <th>Paper ID</th>
+            <th>Action</th>
+            <th>IP Address</th>
+            <th>Time</th>
+
+        </tr>
+
+
+        {% for log in logs %}
+
+        <tr>
+
+            <td>
+                {{ log["username"] }}
+            </td>
+
+            <td>
+                {{ log["paper_id"] }}
+            </td>
+
+            <td>
+                {{ log["action"] }}
+            </td>
+
+            <td>
+                {{ log["ip_address"] }}
+            </td>
+
+            <td>
+                {{ log["timestamp"] }}
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+    {% else %}
+
+        <p>
+            No security logs yet.
+        </p>
+
+    {% endif %}
+
+    {% endif %}
+
+</div>
+
+</body>
+
+</html>

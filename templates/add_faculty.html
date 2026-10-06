@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Add Faculty - PaperGuard</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Add Faculty</h1>
+
+    {% if error %}
+        <p class="error">{{ error }}</p>
+    {% endif %}
+
+    <form method="POST">
+
+        <input
+            type="text"
+            name="username"
+            placeholder="Faculty Username"
+            required
+        >
+
+        <input
+            type="password"
+            name="password"
+            placeholder="Faculty Password"
+            required
+        >
+
+        <button type="submit">
+            Create Faculty
+        </button>
+
+    </form>
+
+    <br>
+
+    <a href="{{ url_for('main.dashboard') }}">
+        Back to Dashboard
+    </a>
+
+</div>
+
+</body>
+
+</html>

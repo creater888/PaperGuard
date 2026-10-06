@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>PaperGuard</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>PaperGuard</h1>
+
+    <h2>Secure Exam Paper Access & Leakage Prevention System</h2>
+
+    <p>
+        Protecting examination papers through secure authentication,
+        encryption and access monitoring.
+    </p>
+
+    <a class="button" href="{{ url_for('main.login') }}">
+        Login
+    </a>
+
+</div>
+
+</body>
+
+</html>

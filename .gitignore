@@ -1,0 +1,13 @@
+.venv/
+__pycache__/
+*.pyc
+
+.env
+
+database/*.db
+
+uploads/*
+encrypted_papers/*
+logs/*
+
+secret.key
